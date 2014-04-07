@@ -146,11 +146,23 @@ class Affiliates_Recaptcha {
 			$affiliates_recaptcha_error = null;
 		}
 
+		$field_error = '';
+		if ( !empty( $affiliates_recaptcha_error ) ) {
+			$field_error = '<div class="error">' . __( 'Please solve the captcha to proof that you are human.', 'affiliates-recaptcha' ) . '</div>';
+		}
+
 		if ( !function_exists( 'recaptcha_get_html' ) ) {
 			require_once 'includes/recaptcha/recaptchalib.php';
 		}
 
-		$field = recaptcha_get_html( get_option( 'affiliates-recaptcha-public-key', '' ), $affiliates_recaptcha_error );
+		$field .= recaptcha_get_html( get_option( 'affiliates-recaptcha-public-key', '' ), $affiliates_recaptcha_error );
+		$field .= apply_filters(
+			'affiliates_recaptcha_field_css',
+			'<style type="text/css">' .
+			'#recaptcha_area { height: 130px; overflow: hidden; }' .
+			'</style>'
+		);
+		$field .= apply_filters( 'affiliates_recaptcha_field_error', $field_error );
 
 		return $field;
 	}
@@ -165,8 +177,6 @@ class Affiliates_Recaptcha {
 	public static function affiliates_captcha_validate( $result, $field_value ) {
 
 		global $affiliates_recaptcha_error;
-		
-		$affiliates_recaptcha_error = null;
 
 		if ( !function_exists( 'recaptcha_check_answer' ) ) {
 			require_once 'includes/recaptcha/recaptchalib.php';
@@ -175,9 +185,11 @@ class Affiliates_Recaptcha {
 		$response = recaptcha_check_answer( get_option( 'affiliates-recaptcha-private-key' ), $_SERVER['REMOTE_ADDR'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'] );
 		if ( !$response->is_valid ) {
 			$affiliates_recaptcha_error = $response->error;
-
+		} else {
+			$affiliates_recaptcha_error = null;
 		}
-		return $response->is_valid;
+
+		return $result && $response->is_valid;
 	}
 
 }
