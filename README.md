@@ -12,3 +12,9 @@ Setup
 
 1. Upload and activate the plugin.
 2. Go to Settings > Affiliates reCAPTCHA and input the public and private key.
+
+Filters
+-------
+
+- affiliates_recaptcha_field_css : allows to modify the CSS that is output to limit the #recaptcha_area container
+- affiliates_recaptcha_field_error : allows to modify the output when the CAPTCHA has not been responded to correctly
