@@ -125,7 +125,7 @@ class Affiliates_Recaptcha {
 		echo sprintf( '<input class="create button" type="submit" name="submit" value="%s" />', __( 'Save', 'affiliates-recaptcha' ) );
 		echo '<input type="hidden" name="action" value="save" />';
 		echo '</div>';
-		
+
 		echo '</div>';
 		echo '</form>';
 		echo '</div>';
