@@ -7,11 +7,13 @@ Integrates <a href="http://www.google.com/recaptcha/">reCAPTCHA</a> with the <a 
 
 Works with <a href="http://www.itthinx.com/plugins/affiliates/">Affiliates</a>, <a href="http://www.itthinx.com/plugins/affiliates-pro/">Affiliates Pro</a> and <a href="http://www.itthinx.com/plugins/affiliates-enterprise/">Affiliates Enterprise</a>.
 
-Setup
------
+Installation & Setup
+--------------------
 
-1. Upload and activate the plugin.
-2. Go to Settings > Affiliates reCAPTCHA and input the public and private key.
+1. Download the plugin ZIP from https://github.com/itthinx/affiliates-recaptcha/
+2. Upload and activate the plugin.
+3. Get the public and private reCAPTCHA keys for your site from https://www.google.com/recaptcha/admin/list
+4. Go to Settings > Affiliates reCAPTCHA and input the public and private key.
 
 Filters
 -------
