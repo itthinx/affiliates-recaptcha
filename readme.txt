@@ -3,7 +3,7 @@ Contributors: itthinx
 Donate link: http://www.itthinx.com/shop/affiliates-pro/
 Tags: affiliate, affiliates, captcha, recaptcha
 Requires at least: 4.0.0
-Tested up to: 4.3
+Tested up to: 4.3.1
 Stable tag: 1.0.0
 License: GPLv3
 
