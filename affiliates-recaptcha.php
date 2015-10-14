@@ -20,8 +20,8 @@
  *
  * Plugin Name: Affiliates reCAPTCHA
  * Plugin URI: https://github.com/itthinx/affiliates-recaptcha
- * Description: Affiliates registration reCAPTCHA integration. IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Public Key and the Private Key.
- * Version: 1.0.0
+ * Description: Affiliates registration reCAPTCHA integration. IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Site Key and the Secret Key.
+ * Version: 1.0.1
  * Author: itthinx
  * Author URI: http://www.itthinx.com
  */
@@ -103,7 +103,7 @@ class Affiliates_Recaptcha {
 
 		echo '<p>';
 		echo '<label>';
-		echo __( 'Public Key', 'affiliates-recaptcha' );
+		echo __( 'Site Key', 'affiliates-recaptcha' );
 		echo ' ';
 		printf( '<input style="display:block;width:80%%" type="text" name="public_key" value="%s" />', esc_attr( $public_key ) );
 		echo '</label>';
@@ -111,7 +111,7 @@ class Affiliates_Recaptcha {
 
 		echo '<p>';
 		echo '<label>';
-		echo __( 'Private Key', 'affiliates-recaptcha' );
+		echo __( 'Secret Key', 'affiliates-recaptcha' );
 		echo ' ';
 		printf( '<input style="display:block;width:80%%" type="text" name="private_key" value="%s" />', esc_attr( $private_key ) );
 		echo '</label>';
@@ -176,19 +176,25 @@ class Affiliates_Recaptcha {
 	 */
 	public static function affiliates_captcha_validate( $result, $field_value ) {
 
-		global $affiliates_recaptcha_error;
+		global $affiliates_recaptcha_error, $affiliates_recaptcha_response;
 
-		if ( !function_exists( 'recaptcha_check_answer' ) ) {
-			require_once 'includes/recaptcha/recaptchalib.php';
-		}
+		if ( !isset( $affiliates_recaptcha_response ) ) {
 
-		$response = recaptcha_check_answer( get_option( 'affiliates-recaptcha-private-key' ), $_SERVER['REMOTE_ADDR'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'] );
-		if ( !$response->is_valid ) {
-			$affiliates_recaptcha_error = $response->error;
+			if ( !function_exists( 'recaptcha_check_answer' ) ) {
+				require_once 'includes/recaptcha/recaptchalib.php';
+			}
+	
+			$response = recaptcha_check_answer( get_option( 'affiliates-recaptcha-private-key' ), $_SERVER['REMOTE_ADDR'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'] );
+			if ( !$response->is_valid ) {
+				$affiliates_recaptcha_error = $response->error;
+			} else {
+				$affiliates_recaptcha_error = null;
+				$affiliates_recaptcha_response = $response;
+			}
+
 		} else {
-			$affiliates_recaptcha_error = null;
+			$response = $affiliates_recaptcha_response;
 		}
-
 		return $result && $response->is_valid;
 	}
 
