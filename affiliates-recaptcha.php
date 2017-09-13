@@ -2,7 +2,7 @@
 /**
  * affiliates-recaptcha.php
  *
- * Copyright (c) 2014 www.itthinx.com
+ * Copyright (c) 2014 - 2017 www.itthinx.com
  *
  * This code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt.
@@ -21,7 +21,7 @@
  * Plugin Name: Affiliates reCAPTCHA
  * Plugin URI: https://github.com/itthinx/affiliates-recaptcha
  * Description: Affiliates registration reCAPTCHA integration. IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Site Key and the Secret Key.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: itthinx
  * Author URI: http://www.itthinx.com
  */
@@ -33,6 +33,7 @@ class Affiliates_Recaptcha {
 	 */
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
+		add_filter( 'plugin_action_links_'. plugin_basename( __FILE__ ), array( __CLASS__, 'plugin_action_links' ) );
 		add_filter( 'affiliates_captcha_get', array( __CLASS__, 'affiliates_captcha_get' ), 10, 2 );
 		add_filter( 'affiliates_captcha_validate', array( __CLASS__, 'affiliates_captcha_validate' ), 10, 2 );
 	}
@@ -48,6 +49,20 @@ class Affiliates_Recaptcha {
 			'affiliates-recaptcha',
 			array( __CLASS__, 'settings' )
 		);
+	}
+
+	/**
+	 * Adds a link to our settings on the plugin entry.
+	 * @param array $links
+	 * @return array
+	 */
+	public static function plugin_action_links( $links ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			$_links = array();
+			$_links[] = '<a href="' . get_admin_url( null, 'options-general.php?page=affiliates-recaptcha' ) . '">' . __( 'Settings', 'affiliates-recaptcha' ) . '</a>';
+			$links = $_links + $links;
+		}
+		return $links;
 	}
 
 	/**
@@ -148,14 +163,21 @@ class Affiliates_Recaptcha {
 
 		$field_error = '';
 		if ( !empty( $affiliates_recaptcha_error ) ) {
-			$field_error = '<div class="error">' . __( 'Please solve the captcha to proof that you are human.', 'affiliates-recaptcha' ) . '</div>';
+			$field_error =
+				'<div class="error">' .
+				__( 'Please solve the captcha to proof that you are human.', 'affiliates-recaptcha' ) .
+				'</div>';
 		}
 
 		if ( !function_exists( 'recaptcha_get_html' ) ) {
 			require_once 'includes/recaptcha/recaptchalib.php';
 		}
 
-		$field .= recaptcha_get_html( get_option( 'affiliates-recaptcha-public-key', '' ), $affiliates_recaptcha_error );
+		$field .= recaptcha_get_html(
+			get_option( 'affiliates-recaptcha-public-key', '' ),
+			$affiliates_recaptcha_error,
+			is_ssl()
+		);
 		$field .= apply_filters(
 			'affiliates_recaptcha_field_css',
 			'<style type="text/css">' .
@@ -184,7 +206,12 @@ class Affiliates_Recaptcha {
 				require_once 'includes/recaptcha/recaptchalib.php';
 			}
 	
-			$response = recaptcha_check_answer( get_option( 'affiliates-recaptcha-private-key' ), $_SERVER['REMOTE_ADDR'], $_POST['recaptcha_challenge_field'], $_POST['recaptcha_response_field'] );
+			$response = recaptcha_check_answer(
+				get_option( 'affiliates-recaptcha-private-key' ),
+				$_SERVER['REMOTE_ADDR'],
+				$_POST['recaptcha_challenge_field'],
+				$_POST['recaptcha_response_field']
+			);
 			if ( !$response->is_valid ) {
 				$affiliates_recaptcha_error = $response->error;
 			} else {
