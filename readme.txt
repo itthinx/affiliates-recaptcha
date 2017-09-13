@@ -3,8 +3,8 @@ Contributors: itthinx
 Donate link: http://www.itthinx.com/shop/affiliates-pro/
 Tags: affiliate, affiliates, captcha, recaptcha
 Requires at least: 4.0.0
-Tested up to: 4.3.1
-Stable tag: 1.0.1
+Tested up to: 4.8.1
+Stable tag: 1.0.2
 License: GPLv3
 
 Affiliates, Affiliates Pro and Affiliates Enterprise registration reCAPTCHA integration.
@@ -29,6 +29,10 @@ Filters
 
 == Changelog ==
 
+= 1.0.2 =
+* Added a link to the settings on the plugin entry.
+* Fixed an issue when HTTPS is used and loading mixed active content would be blocked by browsers.
+
 = 1.0.1 =
 * Updated the wording for keys.
 * Updated the link to reCAPTCHA.
@@ -39,5 +43,6 @@ Filters
 
 == Upgrade Notice ==
 
-= 1.0.1 =
-This version has been updated to reflect the new wording used for reCAPTCHA's keys and fixes a potential issue during registration.
+= 1.0.2 =
+This version fixes an issue which would result in a failure to display the captcha when HTTPS is used,
+it also adds a convenient settings link to the plugin entry.
