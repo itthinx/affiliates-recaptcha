@@ -21,11 +21,10 @@
  * Plugin Name: Affiliates reCAPTCHA
  * Plugin URI: https://github.com/itthinx/affiliates-recaptcha
  * Description: Affiliates registration reCAPTCHA integration. IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Site Key and the Secret Key.
- * Version: 1.0.2
+ * Version: 2.0.0
  * Author: itthinx
  * Author URI: http://www.itthinx.com
  */
-
 class Affiliates_Recaptcha {
 
 	/**
@@ -33,9 +32,15 @@ class Affiliates_Recaptcha {
 	 */
 	public static function init() {
 		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
-		add_filter( 'plugin_action_links_'. plugin_basename( __FILE__ ), array( __CLASS__, 'plugin_action_links' ) );
-		add_filter( 'affiliates_captcha_get', array( __CLASS__, 'affiliates_captcha_get' ), 10, 2 );
-		add_filter( 'affiliates_captcha_validate', array( __CLASS__, 'affiliates_captcha_validate' ), 10, 2 );
+		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( __CLASS__, 'plugin_action_links' ) );
+		if ( get_option( 'affiliates-recaptcha-v2', false ) ) {
+			add_filter( 'affiliates_captcha_get', array( __CLASS__, 'affiliates_captcha_get' ), 10, 2 );
+			add_filter( 'affiliates_captcha_validate', array( __CLASS__, 'affiliates_captcha_validate' ), 10, 2 );
+		} else {
+			require_once 'includes/class-affiliates-recaptcha-legacy.php';
+			add_filter( 'affiliates_captcha_get', array( 'Affiliates_Recaptcha_Legacy', 'affiliates_captcha_get' ), 10, 2 );
+			add_filter( 'affiliates_captcha_validate', array( 'Affiliates_Recaptcha_Legacy', 'affiliates_captcha_validate' ), 10, 2 );
+		}
 	}
 
 	/**
@@ -53,6 +58,7 @@ class Affiliates_Recaptcha {
 
 	/**
 	 * Adds a link to our settings on the plugin entry.
+	 *
 	 * @param array $links
 	 * @return array
 	 */
@@ -71,12 +77,12 @@ class Affiliates_Recaptcha {
 	public static function settings() {
 
 		if ( !current_user_can( 'manage_options' ) ) {
-			wp_die( __( 'Access denied.', 'affiliates-recaptcha' ) );
+			wp_die( esc_html__( 'Access denied.', 'affiliates-recaptcha' ) );
 		}
 
 		if ( isset( $_POST['action'] ) && ( $_POST['action'] == 'save' ) && wp_verify_nonce( $_POST['affiliates-recaptcha'], 'admin' ) ) {
 
-			$public_key = !empty( $_POST['public_key'] ) ? trim( strip_tags( $_POST['public_key'] ) ) : '';
+			$public_key  = !empty( $_POST['public_key'] ) ? trim( strip_tags( $_POST['public_key'] ) ) : '';
 			$private_key = !empty( $_POST['private_key'] ) ? trim( strip_tags( $_POST['private_key'] ) ) : '';
 
 			delete_option( 'affiliates-recaptcha-public-key' );
@@ -85,21 +91,32 @@ class Affiliates_Recaptcha {
 			add_option( 'affiliates-recaptcha-public-key', $public_key, '', 'no' );
 			add_option( 'affiliates-recaptcha-private-key', $private_key, '', 'no' );
 
+			$redirect = !empty( $_POST['recaptcha_v2'] );
+			if ( $redirect ) {
+				if ( get_option( 'affiliates-recaptcha-v2', null ) === null ) {
+					add_option( 'affiliates-recaptcha-v2', 'yes', '', 'no' );
+				} else {
+					update_option( 'affiliates-recaptcha-v2', 'yes' );
+				}
+			} else {
+				delete_option( 'affiliates-recaptcha-v2' );
+			}
+
 			echo
 				'<div class="updated">' .
-				__( 'Settings Saved.', 'affiliates-recaptcha' ) .
+				esc_html__( 'Settings Saved.', 'affiliates-recaptcha' ) .
 				'</div>';
 
 			if ( empty( $public_key ) ) {
 				echo '<div class="error">' .
-					__( 'The public key is empty, you must input a valid public key.', 'affiliates-recaptcha' ) .
+					esc_html__( 'The public key is empty, you must input a valid public key.', 'affiliates-recaptcha' ) .
 					'</div>';
 			}
 
 			if ( empty( $public_key ) ) {
 				echo
 					'<div class="error">' .
-					__( 'The private key is empty, you must input a valid private key.', 'affiliates-recaptcha' ) .
+					esc_html__( 'The private key is empty, you must input a valid private key.', 'affiliates-recaptcha' ) .
 					'</div>';
 			}
 
@@ -108,8 +125,10 @@ class Affiliates_Recaptcha {
 		$public_key = get_option( 'affiliates-recaptcha-public-key', '' );
 		$private_key = get_option( 'affiliates-recaptcha-private-key', '' );
 
+		$v2 = get_option( 'affiliates-recaptcha-v2', false );
+
 		echo '<h1>';
-		echo __( 'Affiliates reCAPTCHA', 'affiliates-recaptcha' );
+		echo esc_html__( 'Affiliates reCAPTCHA', 'affiliates-recaptcha' );
 		echo '</h1>';
 
 		echo '<div class="settings">';
@@ -118,7 +137,7 @@ class Affiliates_Recaptcha {
 
 		echo '<p>';
 		echo '<label>';
-		echo __( 'Site Key', 'affiliates-recaptcha' );
+		echo esc_html__( 'Site Key', 'affiliates-recaptcha' );
 		echo ' ';
 		printf( '<input style="display:block;width:80%%" type="text" name="public_key" value="%s" />', esc_attr( $public_key ) );
 		echo '</label>';
@@ -126,9 +145,22 @@ class Affiliates_Recaptcha {
 
 		echo '<p>';
 		echo '<label>';
-		echo __( 'Secret Key', 'affiliates-recaptcha' );
+		echo esc_html__( 'Secret Key', 'affiliates-recaptcha' );
 		echo ' ';
 		printf( '<input style="display:block;width:80%%" type="text" name="private_key" value="%s" />', esc_attr( $private_key ) );
+		echo '</label>';
+		echo '</p>';
+
+		if ( $v2 ) {
+			$checked = ' checked="checked" ';
+		} else {
+			$checked = '';
+		}
+		echo '<p>';
+		echo '<label>';
+		printf( '<input type="checkbox" name="recaptcha_v2" %s />', esc_attr( $checked ) );
+		echo ' ';
+		echo esc_html__( 'reCaptcha v2? (I\'m not a robot)', 'affiliates-recaptcha' );
 		echo '</label>';
 		echo '</p>';
 
@@ -137,7 +169,7 @@ class Affiliates_Recaptcha {
 		echo '<br/>';
 
 		echo '<div class="buttons">';
-		echo sprintf( '<input class="create button" type="submit" name="submit" value="%s" />', __( 'Save', 'affiliates-recaptcha' ) );
+		echo sprintf( '<input class="create button" type="submit" name="submit" value="%s" />', esc_html__( 'Save', 'affiliates-recaptcha' ) );
 		echo '<input type="hidden" name="action" value="save" />';
 		echo '</div>';
 
@@ -148,13 +180,12 @@ class Affiliates_Recaptcha {
 
 	/**
 	 * Renders the captcha field.
-	 * 
+	 *
 	 * @param string $field
 	 * @param string $value
 	 * @return string
 	 */
 	public static function affiliates_captcha_get( $field, $value ) {
-
 		global $affiliates_recaptcha_error;
 
 		if ( !isset( $affiliates_recaptcha_error ) ) {
@@ -164,26 +195,16 @@ class Affiliates_Recaptcha {
 		$field_error = '';
 		if ( !empty( $affiliates_recaptcha_error ) ) {
 			$field_error =
-				'<div class="error">' .
-				__( 'Please solve the captcha to proof that you are human.', 'affiliates-recaptcha' ) .
-				'</div>';
+			'<div class="error">' .
+			__( 'Please check the captcha to proof that you are human.', 'affiliates-recaptcha' ) .
+			'</div>';
 		}
 
-		if ( !function_exists( 'recaptcha_get_html' ) ) {
-			require_once 'includes/recaptcha/recaptchalib.php';
-		}
+		wp_register_script( 'affiliates-recaptcha-api', 'https://www.google.com/recaptcha/api.js', array( ), '2.0.0' );
+		wp_enqueue_script( 'affiliates-recaptcha-api' );
 
-		$field .= recaptcha_get_html(
-			get_option( 'affiliates-recaptcha-public-key', '' ),
-			$affiliates_recaptcha_error,
-			is_ssl()
-		);
-		$field .= apply_filters(
-			'affiliates_recaptcha_field_css',
-			'<style type="text/css">' .
-			'#recaptcha_area { height: 130px; overflow: hidden; }' .
-			'</style>'
-		);
+		$field .= '<div class="g-recaptcha" data-sitekey="' . get_option( 'affiliates-recaptcha-public-key', '' ) . '"></div>';
+
 		$field .= apply_filters( 'affiliates_recaptcha_field_error', $field_error );
 
 		return $field;
@@ -191,39 +212,28 @@ class Affiliates_Recaptcha {
 
 	/**
 	 * Validates the captcha.
-	 * 
+	 *
 	 * @param boolean $result
 	 * @param string $field_value
 	 * @return boolean
 	 */
 	public static function affiliates_captcha_validate( $result, $field_value ) {
+		global $affiliates_recaptcha_error;
 
-		global $affiliates_recaptcha_error, $affiliates_recaptcha_response;
-
-		if ( !isset( $affiliates_recaptcha_response ) ) {
-
-			if ( !function_exists( 'recaptcha_check_answer' ) ) {
-				require_once 'includes/recaptcha/recaptchalib.php';
-			}
-	
-			$response = recaptcha_check_answer(
-				get_option( 'affiliates-recaptcha-private-key' ),
-				$_SERVER['REMOTE_ADDR'],
-				$_POST['recaptcha_challenge_field'],
-				$_POST['recaptcha_response_field']
-			);
-			if ( !$response->is_valid ) {
-				$affiliates_recaptcha_error = $response->error;
-			} else {
-				$affiliates_recaptcha_error = null;
-				$affiliates_recaptcha_response = $response;
-			}
-
-		} else {
-			$response = $affiliates_recaptcha_response;
+		if ( isset( $_POST['g-recaptcha-response'] ) ) {
+			$captcha = $_POST['g-recaptcha-response'];
 		}
-		return $result && $response->is_valid;
-	}
+		if ( !$captcha ) {
+			$affiliates_recaptcha_error = true;
+			return false;
+		}
+		$response = wp_remote_get( 'https://www.google.com/recaptcha/api/siteverify?secret=' . get_option( 'affiliates-recaptcha-private-key', '' ) . '&response=' . $captcha . '&remoteip=' . $_SERVER['REMOTE_ADDR'] );
+		$response = json_decode( $response['body'], true );
 
+		if ( $response['success'] !== true ) {
+			return false;
+		}
+		return $result;
+	}
 }
 add_action( 'init', array( 'Affiliates_Recaptcha', 'init' ) );
