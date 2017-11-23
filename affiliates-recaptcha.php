@@ -25,15 +25,20 @@
  * Author: itthinx
  * Author URI: http://www.itthinx.com
  */
+
+/**
+ * Plugin reCAPTCHA handler for the API v2.
+ * Renders admin and handles captcha.
+ */
 class Affiliates_Recaptcha {
 
 	/**
 	 * Adds action and filter hooks.
 	 */
 	public static function init() {
-		add_action( 'admin_menu', array( __CLASS__, 'admin_menu' ) );
+		add_action( 'affiliates_admin_menu', array( __CLASS__, 'affiliates_admin_menu' ) );
 		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( __CLASS__, 'plugin_action_links' ) );
-		if ( get_option( 'affiliates-recaptcha-v2', false ) ) {
+		if ( !apply_filters( 'affiliates_recaptcha_legacy', false ) ) {
 			add_filter( 'affiliates_captcha_get', array( __CLASS__, 'affiliates_captcha_get' ), 10, 2 );
 			add_filter( 'affiliates_captcha_validate', array( __CLASS__, 'affiliates_captcha_validate' ), 10, 2 );
 		} else {
@@ -44,16 +49,20 @@ class Affiliates_Recaptcha {
 	}
 
 	/**
-	 * Adds a settings page.
+	 * Adds a submenu item to the Affiliates menu for integration options.
 	 */
-	public static function admin_menu() {
-		add_options_page(
-			'Affiliates reCAPTCHA',
-			'Affiliates reCAPTCHA',
-			'manage_options',
-			'affiliates-recaptcha',
+	public static function affiliates_admin_menu() {
+		$page = add_submenu_page(
+			'affiliates-admin',
+			__( 'Affiliates reCAPTCHA', 'affiliates-recaptcha' ),
+			__( 'reCAPTCHA', 'affiliates-recaptcha' ),
+			AFFILIATES_ADMINISTER_OPTIONS,
+			'affiliates-admin-recaptcha',
 			array( __CLASS__, 'settings' )
 		);
+		$pages[] = $page;
+		add_action( 'admin_print_styles-' . $page, 'affiliates_admin_print_styles' );
+		add_action( 'admin_print_scripts-' . $page, 'affiliates_admin_print_scripts' );
 	}
 
 	/**
@@ -65,7 +74,7 @@ class Affiliates_Recaptcha {
 	public static function plugin_action_links( $links ) {
 		if ( current_user_can( 'manage_options' ) ) {
 			$_links = array();
-			$_links[] = '<a href="' . get_admin_url( null, 'options-general.php?page=affiliates-recaptcha' ) . '">' . __( 'Settings', 'affiliates-recaptcha' ) . '</a>';
+			$_links[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'admin.php??page=affiliates-admin-recaptcha' ) ), esc_html( __( 'Settings', 'affiliates-recaptcha' ) ) );
 			$links = $_links + $links;
 		}
 		return $links;
@@ -91,17 +100,6 @@ class Affiliates_Recaptcha {
 			add_option( 'affiliates-recaptcha-public-key', $public_key, '', 'no' );
 			add_option( 'affiliates-recaptcha-private-key', $private_key, '', 'no' );
 
-			$redirect = !empty( $_POST['recaptcha_v2'] );
-			if ( $redirect ) {
-				if ( get_option( 'affiliates-recaptcha-v2', null ) === null ) {
-					add_option( 'affiliates-recaptcha-v2', 'yes', '', 'no' );
-				} else {
-					update_option( 'affiliates-recaptcha-v2', 'yes' );
-				}
-			} else {
-				delete_option( 'affiliates-recaptcha-v2' );
-			}
-
 			echo
 				'<div class="updated">' .
 				esc_html__( 'Settings Saved.', 'affiliates-recaptcha' ) .
@@ -125,8 +123,6 @@ class Affiliates_Recaptcha {
 		$public_key = get_option( 'affiliates-recaptcha-public-key', '' );
 		$private_key = get_option( 'affiliates-recaptcha-private-key', '' );
 
-		$v2 = get_option( 'affiliates-recaptcha-v2', false );
-
 		echo '<h1>';
 		echo esc_html__( 'Affiliates reCAPTCHA', 'affiliates-recaptcha' );
 		echo '</h1>';
@@ -148,19 +144,6 @@ class Affiliates_Recaptcha {
 		echo esc_html__( 'Secret Key', 'affiliates-recaptcha' );
 		echo ' ';
 		printf( '<input style="display:block;width:80%%" type="text" name="private_key" value="%s" />', esc_attr( $private_key ) );
-		echo '</label>';
-		echo '</p>';
-
-		if ( $v2 ) {
-			$checked = ' checked="checked" ';
-		} else {
-			$checked = '';
-		}
-		echo '<p>';
-		echo '<label>';
-		printf( '<input type="checkbox" name="recaptcha_v2" %s />', esc_attr( $checked ) );
-		echo ' ';
-		echo esc_html__( 'reCaptcha v2? (I\'m not a robot)', 'affiliates-recaptcha' );
 		echo '</label>';
 		echo '</p>';
 
@@ -196,7 +179,7 @@ class Affiliates_Recaptcha {
 		if ( !empty( $affiliates_recaptcha_error ) ) {
 			$field_error =
 			'<div class="error">' .
-			__( 'Please check the captcha to proof that you are human.', 'affiliates-recaptcha' ) .
+			__( 'Please solve the captcha.', 'affiliates-recaptcha' ) .
 			'</div>';
 		}
 
