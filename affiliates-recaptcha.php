@@ -74,7 +74,7 @@ class Affiliates_Recaptcha {
 	public static function plugin_action_links( $links ) {
 		if ( current_user_can( 'manage_options' ) ) {
 			$_links = array();
-			$_links[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'admin.php??page=affiliates-admin-recaptcha' ) ), esc_html( __( 'Settings', 'affiliates-recaptcha' ) ) );
+			$_links[] = sprintf( '<a href="%s">%s</a>', esc_url( admin_url( 'admin.php?page=affiliates-admin-recaptcha' ) ), esc_html( __( 'Settings', 'affiliates-recaptcha' ) ) );
 			$links = $_links + $links;
 		}
 		return $links;
