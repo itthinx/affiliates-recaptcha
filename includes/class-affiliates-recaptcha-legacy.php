@@ -19,6 +19,10 @@
  * @since affiliates-recaptcha 2.0.0
  */
 
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Affiliates reCaptcha v 1.x handler.
  */

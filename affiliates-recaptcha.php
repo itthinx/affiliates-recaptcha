@@ -26,6 +26,10 @@
  * Author URI: http://www.itthinx.com
  */
 
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Plugin reCAPTCHA handler for the API v2.
  * Renders admin and handles captcha.
