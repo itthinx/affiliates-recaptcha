@@ -1,10 +1,10 @@
 === Affiliates reCAPTCHA ===
 Contributors: itthinx
-Donate link: http://www.itthinx.com/shop/
+Donate link: https://www.itthinx.com/shop/
 Tags: affiliate, affiliates, captcha, recaptcha, affiliate marketing
 Requires at least: 4.0.0
 Tested up to: 5.7
-Requires PHP: 5.5.0
+Requires PHP: 5.6.0
 Stable tag: 2.1.0
 License: GPLv3
 
@@ -14,7 +14,9 @@ Affiliates, Affiliates Pro and Affiliates Enterprise registration reCAPTCHA inte
 
 Integrates [Google reCAPTCHA](http://www.google.com/recaptcha/) with the affiliate registration of [Affiliates](https://wordpress.org/plugins/affiliates/), [Affiliates Pro](https://www.itthinx.com/shop/affiliates-pro/) and [Affiliates Enterprise](https://www.itthinx.com/shop/affiliates-enterprise/).
 
-When you use the `[affiliates_registration]` shortcode and this extension has been configured with the correct Site Key and Secret Key for the Google reCAPTCHA, the reCAPTCHA will be displayed and verified on the affiliate registration form.
+When you use the `[affiliates_dashboard]` or `[affiliates_dashboard_registration]` or `[affiliates_registration]` shortcode, and this extension has been configured with the correct Site Key and Secret Key for the Google reCAPTCHA, the reCAPTCHA will be displayed and verified on the affiliate registration form.
+
+This integration works with reCAPTCHA v2, it does not work with reCAPTCHA v3.
 
 = Requirements =
 [Affiliates](https://wordpress.org/plugins/affiliates/), [Affiliates Pro](https://www.itthinx.com/shop/affiliates-pro/) or [Affiliates Enterprise](https://www.itthinx.com/shop/affiliates-enterprise/).
@@ -26,25 +28,9 @@ When you use the `[affiliates_registration]` shortcode and this extension has be
 
 == Changelog ==
 
-= 2.0.0 =
-* WordPress 4.9 tested.
-* Updated for the latest Google reCaptcha API.
-* Added the affiliates_recaptcha_legacy filter.
-* Moved the settings to the right place under the Affiliates menu.
-
-= 1.0.2 =
-* Added a link to the settings on the plugin entry.
-* Fixed an issue when HTTPS is used and loading mixed active content would be blocked by browsers.
-
-= 1.0.1 =
-* Updated the wording for keys.
-* Updated the link to reCAPTCHA.
-* Fixed an issue with multiple form shortcode renderings.
-
-= 1.0.0 =
-* Initial release.
+See [changelog.txt](https://github.com/itthinx/affiliates-recaptcha/blob/master/changelog.txt).
 
 == Upgrade Notice ==
 
-= 2.0.0 =
-This version has been tested with WordPress 4.9 and uses the latest Google reCAPTCHA API.
+This version has been tested with the latest version of WordPress and reCAPTCHA v2.
+Please note that reCAPTCHA v3 is not supported.
