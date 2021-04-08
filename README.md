@@ -3,14 +3,14 @@ affiliates-recaptcha
 
 Affiliates registration reCAPTCHA integration
 
-Integrates <a href="http://www.google.com/recaptcha/">reCAPTCHA</a> with the <a href="http://www.itthinx.com/plugins/affiliates/">Affiliates</a> registration form.
+Integrates <a href="https://www.google.com/recaptcha/">reCAPTCHA</a> with the <a href="https://www.itthinx.com/plugins/affiliates/">Affiliates</a> registration form.
 
-Works with <a href="http://www.itthinx.com/plugins/affiliates/">Affiliates</a>, <a href="http://www.itthinx.com/plugins/affiliates-pro/">Affiliates Pro</a> and <a href="http://www.itthinx.com/plugins/affiliates-enterprise/">Affiliates Enterprise</a>.
+Works with <a href="https://www.itthinx.com/plugins/affiliates/">Affiliates</a>, <a href="https://www.itthinx.com/shop/affiliates-pro/">Affiliates Pro</a> and <a href="https://www.itthinx.com/shop/affiliates-enterprise/">Affiliates Enterprise</a>.
 
 Installation & Setup
 --------------------
 
-1. Download the plugin ZIP from https://github.com/itthinx/affiliates-recaptcha/
+1. Install Affiliates reCAPTCHA from your WordPress dashboard or download the plugin ZIP from https://github.com/itthinx/affiliates-recaptcha/ and extract it to your plugins folder.
 2. Upload and activate the plugin.
 3. Get the public and private reCAPTCHA keys for your site from https://www.google.com/recaptcha/admin/list
 4. Go to Settings > Affiliates reCAPTCHA and input the public and private key.

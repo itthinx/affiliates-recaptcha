@@ -2,7 +2,7 @@
 /**
  * affiliates-recaptcha.php
  *
- * Copyright (c) 2014 - 2017 www.itthinx.com
+ * Copyright (c) 2014 - 2021 www.itthinx.com
  *
  * This code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt.
@@ -20,10 +20,10 @@
  *
  * Plugin Name: Affiliates reCAPTCHA
  * Plugin URI: https://github.com/itthinx/affiliates-recaptcha
- * Description: Affiliates registration reCAPTCHA integration. IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Site Key and the Secret Key.
- * Version: 2.0.0
+ * Description: Affiliates registration reCAPTCHA v2 integration (does not support reCAPTCHA v3). IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Site Key and the Secret Key.
+ * Version: 2.1.0
  * Author: itthinx
- * Author URI: http://www.itthinx.com
+ * Author URI: https://www.itthinx.com
  */
 
 if ( !defined( 'ABSPATH' ) ) {
