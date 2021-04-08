@@ -1,0 +1,24 @@
+== Affiliates reCAPTCHA - Changelog ==
+
+= 2.1.0 =
+* WordPress 5.7 compatible.
+* Works with reCAPTCHA v2.
+* Does not support reCAPTCHA v3.
+
+= 2.0.0 =
+* WordPress 4.9 tested.
+* Updated for the latest Google reCaptcha API.
+* Added the affiliates_recaptcha_legacy filter.
+* Moved the settings to the right place under the Affiliates menu.
+
+= 1.0.2 =
+* Added a link to the settings on the plugin entry.
+* Fixed an issue when HTTPS is used and loading mixed active content would be blocked by browsers.
+
+= 1.0.1 =
+* Updated the wording for keys.
+* Updated the link to reCAPTCHA.
+* Fixed an issue with multiple form shortcode renderings.
+
+= 1.0.0 =
+* Initial release.
