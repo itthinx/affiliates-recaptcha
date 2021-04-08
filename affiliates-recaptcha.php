@@ -23,7 +23,7 @@
  * Description: Affiliates registration reCAPTCHA v2 integration (does not support reCAPTCHA v3). IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Site Key and the Secret Key.
  * Version: 2.1.0
  * Author: itthinx
- * Author URI: http://www.itthinx.com
+ * Author URI: https://www.itthinx.com
  */
 
 if ( !defined( 'ABSPATH' ) ) {
