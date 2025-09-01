@@ -12,8 +12,8 @@ Installation & Setup
 
 1. Install Affiliates reCAPTCHA from your WordPress dashboard or download the plugin ZIP from https://github.com/itthinx/affiliates-recaptcha/ and extract it to your plugins folder.
 2. Upload and activate the plugin.
-3. Get the public and private reCAPTCHA keys for your site from https://www.google.com/recaptcha/admin/list
-4. Go to Settings > Affiliates reCAPTCHA and input the public and private key.
+3. Get the Site Key and the Secret Key for your site. See https://www.google.com/recaptcha ...
+4. Go to Affiliates > reCAPTCHA and input the public and private key.
 
 Filters
 -------
