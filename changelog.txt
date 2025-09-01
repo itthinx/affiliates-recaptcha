@@ -1,5 +1,8 @@
 == Affiliates reCAPTCHA - Changelog ==
 
+= 2.2.0 =
+* WordPress 6.8 compatible.
+
 = 2.1.0 =
 * WordPress 5.7 compatible.
 * Works with reCAPTCHA v2.

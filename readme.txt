@@ -3,9 +3,9 @@ Contributors: itthinx
 Donate link: https://www.itthinx.com/shop/
 Tags: affiliate, affiliates, captcha, recaptcha, affiliate marketing
 Requires at least: 4.0.0
-Tested up to: 5.7
+Tested up to: 6.8
 Requires PHP: 5.6.0
-Stable tag: 2.1.0
+Stable tag: 2.2.0
 License: GPLv3
 
 Affiliates, Affiliates Pro and Affiliates Enterprise registration reCAPTCHA integration.

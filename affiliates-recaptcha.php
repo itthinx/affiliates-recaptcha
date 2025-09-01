@@ -21,7 +21,7 @@
  * Plugin Name: Affiliates reCAPTCHA
  * Plugin URI: https://github.com/itthinx/affiliates-recaptcha
  * Description: Affiliates registration reCAPTCHA v2 integration (does not support reCAPTCHA v3). IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Site Key and the Secret Key.
- * Version: 2.1.0
+ * Version: 2.2.0
  * Author: itthinx
  * Author URI: https://www.itthinx.com
  */
