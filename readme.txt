@@ -2,9 +2,9 @@
 Contributors: itthinx
 Donate link: https://www.itthinx.com/shop/
 Tags: affiliate, affiliates, captcha, recaptcha, affiliate marketing
-Requires at least: 4.0.0
+Requires at least: 6.5
 Tested up to: 6.8
-Requires PHP: 5.6.0
+Requires PHP: 7.4
 Stable tag: 2.2.0
 License: GPLv3
 
@@ -16,7 +16,7 @@ Integrates [Google reCAPTCHA](http://www.google.com/recaptcha/) with the affilia
 
 When you use the `[affiliates_dashboard]` or `[affiliates_dashboard_registration]` or `[affiliates_registration]` shortcode, and this extension has been configured with the correct Site Key and Secret Key for the Google reCAPTCHA, the reCAPTCHA will be displayed and verified on the affiliate registration form.
 
-This integration works with reCAPTCHA v2, it does not work with reCAPTCHA v3.
+This integration works with reCAPTCHA v2. It does not support reCAPTCHA v3.
 
 = Requirements =
 [Affiliates](https://wordpress.org/plugins/affiliates/), [Affiliates Pro](https://www.itthinx.com/shop/affiliates-pro/) or [Affiliates Enterprise](https://www.itthinx.com/shop/affiliates-enterprise/).

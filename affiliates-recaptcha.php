@@ -2,7 +2,7 @@
 /**
  * affiliates-recaptcha.php
  *
- * Copyright (c) 2014 - 2021 www.itthinx.com
+ * Copyright (c) 2014 - 2025 www.itthinx.com
  *
  * This code is released under the GNU General Public License.
  * See COPYRIGHT.txt and LICENSE.txt.
@@ -20,10 +20,14 @@
  *
  * Plugin Name: Affiliates reCAPTCHA
  * Plugin URI: https://github.com/itthinx/affiliates-recaptcha
- * Description: Affiliates registration reCAPTCHA v2 integration (does not support reCAPTCHA v3). IMPORTANT : Go to Settings > Affiliates reCAPTCHA and input the Site Key and the Secret Key.
+ * Description: Affiliates registration reCAPTCHA v2 integration (does not support reCAPTCHA v3).
  * Version: 2.2.0
+ * Requires at least: 6.5
+ * Requires PHP: 7.4
  * Author: itthinx
  * Author URI: https://www.itthinx.com
+ * Donate-Link: https://www.itthinx.com/shop
+ * License: GPLv3
  */
 
 if ( !defined( 'ABSPATH' ) ) {
@@ -156,7 +160,7 @@ class Affiliates_Recaptcha {
 		echo '<br/>';
 
 		echo '<div class="buttons">';
-		echo sprintf( '<input class="create button" type="submit" name="submit" value="%s" />', esc_html__( 'Save', 'affiliates-recaptcha' ) );
+		echo sprintf( '<input class="create button button-primary" type="submit" name="submit" value="%s" />', esc_html__( 'Save', 'affiliates-recaptcha' ) );
 		echo '<input type="hidden" name="action" value="save" />';
 		echo '</div>';
 
