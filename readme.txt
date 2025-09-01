@@ -14,9 +14,12 @@ Affiliates, Affiliates Pro and Affiliates Enterprise registration reCAPTCHA inte
 
 Integrates [Google reCAPTCHA](http://www.google.com/recaptcha/) with the affiliate registration of [Affiliates](https://wordpress.org/plugins/affiliates/), [Affiliates Pro](https://www.itthinx.com/shop/affiliates-pro/) and [Affiliates Enterprise](https://www.itthinx.com/shop/affiliates-enterprise/).
 
-When you use the `[affiliates_dashboard]` or `[affiliates_dashboard_registration]` or `[affiliates_registration]` shortcode, and this extension has been configured with the correct Site Key and Secret Key for the Google reCAPTCHA, the reCAPTCHA will be displayed and verified on the affiliate registration form.
-
 This integration works with reCAPTCHA v2. It does not support reCAPTCHA v3.
+
+
+Configure it with your Site Key and Secret Key from Google reCAPTCHA. The reCAPTCHA will be displayed and verified on the affiliate registration form.
+
+The reCAPTCHA is displayed with the Affiliates Dashboard block, the Affiliates Dashboard Registration block and the  `[affiliates_dashboard]`, `[affiliates_dashboard_registration]` and `[affiliates_registration]` shortcodes.
 
 = Requirements =
 [Affiliates](https://wordpress.org/plugins/affiliates/), [Affiliates Pro](https://www.itthinx.com/shop/affiliates-pro/) or [Affiliates Enterprise](https://www.itthinx.com/shop/affiliates-enterprise/).
